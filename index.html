@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arnib's Love Confession</title>
+    <style>
+        :root {
+            --primary-red: #ff4444;
+            --secondary-red: #ff6666;
+            --dark-gray: #444444;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(45deg, #ff0000, var(--secondary-red));
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        #questionContainer {
+            position: relative;
+            width: 90%;
+            max-width: 400px;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.2);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .button-group {
+            margin-top: 1.5rem;
+            position: relative;
+            min-height: 50px;
+        }
+
+        .action-btn {
+            padding: 12px 25px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            margin: 10px;
+            border: none;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+        #yesBtn {
+            background: var(--primary-red);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255,68,68,0.4);
+        }
+
+        #noBtn {
+            background: var(--dark-gray);
+            color: white;
+            position: absolute;
+        }
+
+        #heartLoader {
+            font-size: 1.5rem;
+            display: none;
+            color: var(--primary-red);
+            animation: pulse 1s infinite;
+            margin: 1rem 0;
+        }
+
+        #resultContainer {
+            display: none;
+            font-size: 1.4rem;
+            color: var(--primary-red);
+            margin-top: 1rem;
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #ffffff;
+            animation: confettiFall 3s linear;
+        }
+
+        #message {
+            position: fixed;
+            top: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 20px;
+            background: var(--primary-red);
+            color: white;
+            border-radius: 25px;
+            transition: top 0.5s ease;
+            white-space: nowrap;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes confettiFall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            #questionContainer {
+                width: 85%;
+                padding: 1.5rem;
+            }
+            
+            .action-btn {
+                padding: 10px 20px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="message"></div>
+    <div id="questionContainer">
+        <p class="question-text">Do you love me? 💖</p>
+        <div class="button-group">
+            <button id="yesBtn" class="action-btn">YES! 💞</button>
+            <button id="noBtn" class="action-btn">No 😢</button>
+        </div>
+        <div id="heartLoader">💘 Loading Destiny...</div>
+        <div id="resultContainer">
+            <div>You are the most hotest girl i sea in my life Aroni 🌹</div>
+            <div>That's why </div>
+            <div>I really LOVE YOU A LOT! 🥀😘</div>
+        </div>
+    </div>
+
+<script>
+    const noBtn = document.getElementById("noBtn");
+    const yesBtn = document.getElementById("yesBtn");
+    const questionContainer = document.getElementById("questionContainer");
+    const heartLoader = document.getElementById("heartLoader");
+    const resultContainer = document.getElementById("resultContainer");
+    const message = document.getElementById("message");
+    let escapeCount = 0;
+
+    const funnyMessages = [,
+        "I am sorry for tomorrow's incident Aroni 😭",
+        "Let's fix it together 🤧",
+        "I love you a lot Aroni 😅",
+        "Everyone makes mistakes, right? 😅",
+        "Stay with me 😭",
+        "I need you Aroni 🥀",
+        "You're my everything Aroni 🥀",
+        "I miss you so much Aroni",
+        "I won't lose you again 🤧",
+        "Please give me another chance! 🥺",
+        "You complete me Aroni 💞",
+        "My love for you is eternal 🌹"
+    ];
+
+    // Confetti animation
+    const createConfetti = () => {
+        const colors = ['#ff0000', '#ffffff', '#fff000', '#00ff00'];
+        for(let i = 0; i < 75; i++) {
+            const confetti = document.createElement("div");
+            confetti.className = "confetti";
+            confetti.style.left = Math.random() * 100 + "%";
+            confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.animationDelay = Math.random() * 2 + "s";
+            document.body.appendChild(confetti);
+            setTimeout(() => confetti.remove(), 3000);
+        }
+    }
+
+    // Message notification
+    const showMessage = (text) => {
+        message.textContent = text;
+        message.style.top = "20px";
+        setTimeout(() => message.style.top = "-50px", 1500);
+    }
+
+    // Move button logic
+    const moveButton = () => {
+        const containerRect = questionContainer.getBoundingClientRect();
+        const maxX = containerRect.width - noBtn.offsetWidth - 20;
+        const maxY = containerRect.height - noBtn.offsetHeight - 20;
+        
+        const newX = Math.random() * maxX;
+        const newY = Math.random() * maxY;
+        
+        noBtn.style.transform = `translate(${newX}px, ${newY}px)`;
+        showMessage(funnyMessages[Math.floor(Math.random() * funnyMessages.length)]);
+        escapeCount++;
+        
+        if(escapeCount > 5) {
+            noBtn.style.transition = "all 0.3s ease";
+        }
+    }
+
+    // Event Listeners
+    noBtn.addEventListener("mouseover", moveButton);
+    noBtn.addEventListener("touchstart", (e) => {
+        e.preventDefault();
+        moveButton();
+    });
+
+    noBtn.addEventListener("click", () => {
+        showMessage("I'll keep trying until you say YES! 💪");
+    });
+
+    yesBtn.addEventListener("click", () => {
+        yesBtn.style.transform = "scale(1.1)";
+        heartLoader.style.display = "block";
+        
+        setTimeout(() => {
+            heartLoader.style.display = "none";
+            questionContainer.style.transform = "scale(0.97)";
+            resultContainer.style.display = "block";
+            createConfetti();
+            questionContainer.style.background = "rgba(255, 255, 255, 0.98)";
+        }, 2000);
+        
+        setTimeout(() => {
+            questionContainer.style.transform = "scale(1)";
+        }, 2500);
+    });
+
+    // Button hover effects
+    yesBtn.addEventListener("mouseover", () => {
+        yesBtn.style.transform = "rotate(-2deg) scale(1.05)";
+    });
+    
+    yesBtn.addEventListener("mouseout", () => {
+        yesBtn.style.transform = "scale(1)";
+    });
+
+    // Initial position for No button
+    moveButton();
+</script>
+</body>
+</html>
